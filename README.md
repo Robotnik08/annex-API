@@ -1,3 +1,9 @@
 # module_11
 
-Epiuc
+## Team Hoofd: Pulllee inc.
+### Kaj Boogaard, Ross van Teeffelen, Sebastiaan Heins
+
+Installation:<br>
+<br>
+$ npm i
+$ npm start
