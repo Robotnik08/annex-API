@@ -13,4 +13,4 @@ To get started with this project, follow these steps:
 $ npm i
 $ npm start
 ```
-![Alt Text](https://dummyimage.com/1000x100/FF0000/000&text=+Pulllee+Inc.+)
+![Alt Text](https://dummyimage.com/1000x150/6b03fc/FFF&text=+Pulllee+Inc.+)
