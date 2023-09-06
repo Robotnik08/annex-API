@@ -5,5 +5,7 @@
 
 Installation:<br>
 <br>
-$ npm i
+<code>
+$ npm i <br>
 $ npm start
+</code>
