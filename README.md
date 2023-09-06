@@ -4,8 +4,7 @@
 ### Kaj Boogaard, Ross van Teeffelen, Sebastiaan Heins
 
 Installation:<br>
-<br>
 <code>
-$ npm i <br>
+$ npm i
 $ npm start
 </code>
