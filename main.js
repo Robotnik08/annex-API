@@ -1,14 +1,22 @@
+/**
+ * @fileoverview This file is the entry point of the application.
+ * This code was written by Pulllee inc.
+ */
+
 import { Middleware } from './includes/middleware.mjs';
-import { getResponse } from './includes/getResult.mjs';
+import { ResponseHandler } from './includes/getResult.mjs';
 import { Server } from './includes/server.mjs';
 
+// server initialization
 const server = new Server(80);
 
 // middleware initialization
 const middleware = new Middleware();
 server.subscribeToUSEPath('/', middleware.handler);
 
-server.subscribeToGET('/', getResponse);
+// response handler initialization
+const responseHandler = new ResponseHandler();
+server.subscribeToGET('/', responseHandler.handler);
 
 // start the server after subscribing to requests
 server.start();
