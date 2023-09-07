@@ -1,14 +1,13 @@
 {
-    "name": "api",
-    "version": "0.0.1",
-    "description": "",
-    "main": "server.js",
+    "name": "annex-bios-api",
+    "version": "0.1",
+    "description": "This is the main API for the annex bios project.",
+    "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node main.js"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "Pulllee inc.",
     "dependencies": {
         "express": "^4.18.1"
     },
