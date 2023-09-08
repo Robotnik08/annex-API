@@ -10,6 +10,6 @@ export class ResponseHandler {
         // get the result from the request and send it back to the client, implement in the future
         res.json({
             result: "Hello World!"
-        }); // send an empty JSON object
+        }); // send an test JSON object
     }
 }
