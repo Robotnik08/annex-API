@@ -5,8 +5,10 @@
  */
 
 export class Middleware {
-    // template for middleware implementation in the future
     handler(req, res, next) {
-        // get the result from the request and send it back to the client, implement in the future
+        res.header('Access-Control-Allow-Origin', '*'); // wild card
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.header('Access-Control-Allow-Methods', 'GET'); // only allow GET requests for REST API
+        next();
     }
 }
