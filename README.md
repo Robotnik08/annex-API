@@ -1,6 +1,6 @@
 # module_11
 ![Alt Text](https://dummyimage.com/1000x1/000000/fff&text=+)
-## Team Hoofd: Pulllee inc.
+## Team Hoofd: Pulllee Inc.
 ### Kaj Boogaard, Ross van Teeffelen, Sebastiaan Heins
 
 Welcome to our project repository! This repository contains the code for Module 11 by Team Hoofd at Pulllee Inc.

@@ -1,6 +1,6 @@
 /**
  * @fileoverview This file is the entry point of the application.
- * This code was written by Pulllee inc.
+ * This code was written by Pulllee Inc.
  */
 
 import { Middleware } from './includes/middleware.mjs';
