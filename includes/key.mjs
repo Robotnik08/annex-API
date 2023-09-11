@@ -10,9 +10,15 @@ import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+// file urls
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/**
+ * @class KeyGenerator
+ * @description This class generates API keys, 32 characters long.
+ * @module KeyGenerator
+ */
 export class KeyGenerator {
     #characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -25,6 +31,11 @@ export class KeyGenerator {
     }
 }
 
+/**
+ * @file key.mjs
+ * @description This file handles API key management.
+ * @module KeyManager
+ */
 export class KeyManager {
     #keys = [];
 

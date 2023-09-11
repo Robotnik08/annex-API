@@ -1,9 +1,19 @@
+/**
+ * @file ratelimit.mjs
+ * @description This file handles rate limiting.
+ * @module RateLimiter
+ */
+
 const MAX_REQUESTS_PER_HOUR = 10000;
+
 
 export class RateLimiter {
     #requests;
     #lastHour;
 
+    /**
+     * Creates a new rate limiter instance.
+     */
     constructor() {
         this.#requests = {};
         this.#lastHour = new Date().getHours();
