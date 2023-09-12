@@ -4,7 +4,6 @@
  * @module ResponseHandler
  */
 
-import { json } from "express";
 import fetch from "node-fetch";
 
 // root function for the result
