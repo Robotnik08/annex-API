@@ -4,7 +4,7 @@
  * @module RateLimiter
  */
 
-const MAX_REQUESTS_PER_HOUR = 10000;
+const MAX_REQUESTS_PER_HOUR = 3000;
 
 
 export class RateLimiter {
