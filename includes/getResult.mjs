@@ -33,7 +33,15 @@ export class ResponseHandler {
                 }
                 handleMovieRequest(req, res, next, searchQuery.id);
                 break;
-            case "showing":
+            case "cast":
+                if (searchQuery.id === undefined) {
+                    res.status(400).json({message: "No movie ID provided."});
+                    return;
+                } else if (typeof searchQuery.id !== "number") {
+                    res.status(400).json({message: "Movie ID must be a number."});
+                    return;
+                }
+                handleCastRequest(req, res, next, searchQuery.id);
                 break;
             case "now_playing":
                 searchQuery.page ??= 1;
@@ -43,10 +51,11 @@ export class ResponseHandler {
                 }
                 handleNowPlayingRequest(req, res, next, searchQuery.page);
                 break;
+            case "showing":
+                break;
             default:
-                res.status(400).json({message: "Invalid search query type. Must be one of: movie, showing, now_playing."});
+                res.status(400).json({message: "Invalid search query type. Must be one of: movie, showing, now_playing or cast."});
         }
-        // send an test JSON object
         function handleMovieRequest (req, res, next, id) {
             // get the movie info from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
@@ -76,6 +85,36 @@ export class ResponseHandler {
             .then((json) => {
                 res.json(json);
             });
+        }
+        function handleCastRequest (req, res, next, id) {
+            // get the cast data from the movie database from the id
+            const url = `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`;
+            const options = {
+                method: "GET",
+                headers: {
+                    accept: "application/json",
+                    Authorization: `Bearer ${API_KEY}`,
+                }
+            };
+            fetch(url, options).then((res) => res.json())
+            .then((json) => {
+                res.send(json.cast);
+            });
+        }
+        function convertMovieToJson (json) {
+            const result = {
+                movie_id: json.id,
+                movie_name: json.title,
+                movie_date: json.release_date,
+                age_rating: json.adult ? "18+" : false,
+                runtime: json.runtime,
+                genres: [],
+                rating: json.vote_average
+            }
+            for (let genre of json.genres) {
+                result.genres.push(genre.name);
+            }
+            return result;
         }
     }
 }
