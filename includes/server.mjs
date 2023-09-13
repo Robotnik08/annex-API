@@ -1,9 +1,6 @@
 import express from 'express';
 import http from 'http';
 
-/**
- * A simple server class wrapping Express and HTTP.
- */
 export class Server {
 
     // Private fields
