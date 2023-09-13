@@ -13,4 +13,9 @@ To get started with this project, follow these steps:
 $ npm i
 $ npm start
 ```
+To generate an api key
+```bash
+$ npm run key
+```
+To populate the database open seeder.php in your browser (with php)
 ![Alt Text](https://dummyimage.com/1000x150/6b03fc/FFF&text=+Pulllee+Inc.+)
