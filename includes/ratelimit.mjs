@@ -20,7 +20,7 @@ export class RateLimiter {
     }
 
     checkKey(key) {
-        if (!this.#requests[key]) this.#requests[key] = 0;
+        this.#requests[key] ??= 0;
         if (this.#lastHour !== new Date().getHours()) {
             for (const key in this.#requests) {
                 this.#requests[key] = 0;
