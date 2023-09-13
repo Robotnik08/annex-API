@@ -38,7 +38,7 @@
     catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
-    // seedDataBase($ids, $conn);
+    seedDataBase($ids, $conn);
     function seedDataBase ($ids, $conn) {
         for ($day = 0; $day < 366; $day++) {
             $today = date("Y-m-d", strtotime("+$day days"));
