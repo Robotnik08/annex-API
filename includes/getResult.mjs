@@ -50,8 +50,10 @@ export class ResponseHandler {
                     return;
                 }
                 handleNowPlayingRequest(req, res, next, searchQuery.page);
+
                 break;
             case "showing":
+                // phase 5
                 break;
             default:
                 res.status(400).json({message: "Invalid search query type. Must be one of: movie, showing, now_playing or cast."});
@@ -68,7 +70,7 @@ export class ResponseHandler {
             };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
-                res.json(json);
+                res.json(convertMovieToJson(json));
             });
         }
         function handleNowPlayingRequest (req, res, next, page) {
@@ -83,7 +85,7 @@ export class ResponseHandler {
             };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
-                res.json(json);
+                res.json(convertNowPlayingJson(json));
             });
         }
         function handleCastRequest (req, res, next, id) {
@@ -98,9 +100,38 @@ export class ResponseHandler {
             };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
-                res.send(json.cast);
+                res.send(convertCast(json));
             });
         }
+        function convertNowPlayingJson(json){
+            const result = {
+                results: []
+            }
+             for (let movie of json.results){
+                result.results.push(convertMovieToJson(movie));
+             }
+            return result;
+        }
+
+        function convertCast(json){
+            const result = {
+                movie_id: json.id,
+                cast: []
+            }
+            for (let cast of json.cast) {
+                result.cast.push({
+                    name: cast.name,
+                    gender: cast.gender,
+                    department: cast.known_for_department,
+                    profile_picture: "https://image.tmdb.org/t/p/original" + cast.profile_path,
+                    character: cast.character,
+                    order: cast.order
+                });
+            }
+
+            return result
+        }
+
         function convertMovieToJson (json) {
             const result = {
                 movie_id: json.id,
@@ -108,11 +139,23 @@ export class ResponseHandler {
                 movie_date: json.release_date,
                 age_rating: json.adult ? "18+" : false,
                 runtime: json.runtime,
-                genres: [],
-                rating: json.vote_average
+                genres: json.genres ? [] : undefined,
+                rating: json.vote_average,
+                release_date: json.release_date,
+                duration: json.runtime,
+                poster: "https://image.tmdb.org/t/p/original" + json.poster_path,
+                big_discription: json.overview,
+                small_discription: json.tagline,
+                original_language: json.original_language,
+                counrty_of_origin: json.production_countries ? json.production_countries[0].name : undefined,
+                status: json.status,
+                production_companies: json.production_companies ? [] : undefined
             }
-            for (let genre of json.genres) {
+            if (json.genres) for (let genre of json.genres) {
                 result.genres.push(genre.name);
+            }
+            if (json.production_companies) for (let comp of json.production_companies){
+                result.production_companies.push(comp.name);
             }
             return result;
         }
