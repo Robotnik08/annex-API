@@ -1,11 +1,16 @@
 import express from 'express';
 import http from 'http';
+import https from 'https';
 
+const options = {
+    key: fs.readFileSync("PATH_TO_KEY"),
+    cert: fs.readFileSync("PATH_TO_CERTIFICATE"),
+};
 export class Server {
 
     // Private fields
     #expressApp;
-    #httpServer;
+    #server;
     #port;
 
     /**
@@ -13,10 +18,15 @@ export class Server {
      * @param {number} port - The port on which the server should listen.
      * @param {boolean} https - Whether to use HTTPS (default: false).
      */
-    constructor(port, https = false) {
+    constructor(port, _https = false) {
         this.#expressApp = express();
-        this.#httpServer = http.createServer(this.#expressApp);
-        this.#port = port;
+        if (!_https) {
+            this.#server = http.createServer(this.#expressApp);
+            this.#port = port;
+        } else {
+            this.#server = https.createServer(this.#expressApp, options);
+            this.#port = 443;
+        }
     }
 
     // getters and setters
@@ -40,14 +50,14 @@ export class Server {
      * Start the server with the specified port.
      */
     start() {
-        this.#httpServer.listen(this.#port, () => {
+        this.#server.listen(this.#port, () => {
             console.log(`Server is listening on port ${this.#port}`);
         });
 
-        this.#httpServer.on('error', (error) => {
+        this.#server.on('error', (error) => {
             console.error(`Server failed to start: ${error.message}`);
         });
-        this.#httpServer.on('close', () => {
+        this.#server.on('close', () => {
             console.log('Server stopped listening');
         });
     }
