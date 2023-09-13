@@ -5,8 +5,8 @@
  */
 
 import fetch from "node-fetch";
+import { API_KEY } from "./getConfig.mjs";
 
-const API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNjM3NzgwMDliNjM1ZDA2NTVkMTdjMmFlYTc2YzIzZiIsInN1YiI6IjY0Zjg3MjU5NWYyYjhkMDBjNDM1MWNjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B9_HCUeJyEZWDTNF31ZVhYdxTmeymyidiPPfyu50dVg";
 const options = {
     method: "GET",
     headers: {
@@ -14,6 +14,7 @@ const options = {
         Authorization: `Bearer ${API_KEY}`,
     }
 };
+
 export class ResponseHandler {
     handler(req, res, next) {
         // get the search query from the headers
