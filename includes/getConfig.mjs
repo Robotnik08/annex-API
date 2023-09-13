@@ -4,9 +4,10 @@
  * 
 */
 
-import { fs } from 'fs';
-import { path } from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
+const __dirname = path.resolve();
 export const API_KEY = JSON.parse(getConfig()).api_key;
 
 function getConfig() {
