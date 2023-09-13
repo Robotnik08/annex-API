@@ -1,10 +1,12 @@
 import express from 'express';
 import http from 'http';
 import https from 'https';
+import fs from 'fs';
 
 const options = {
-    key: fs.readFileSync("PATH_TO_KEY"),
-    cert: fs.readFileSync("PATH_TO_CERTIFICATE"),
+    cert: fs.readFileSync("PATH_TO_KEY"),
+    key: fs.readFileSync("PATH_TO_CERTIFICATE"),
+    ca: fs.readFileSync("PATH_TO_CA")
 };
 export class Server {
 
