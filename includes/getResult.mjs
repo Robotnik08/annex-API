@@ -7,7 +7,13 @@
 import fetch from "node-fetch";
 
 const API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNjM3NzgwMDliNjM1ZDA2NTVkMTdjMmFlYTc2YzIzZiIsInN1YiI6IjY0Zjg3MjU5NWYyYjhkMDBjNDM1MWNjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B9_HCUeJyEZWDTNF31ZVhYdxTmeymyidiPPfyu50dVg";
-
+const options = {
+    method: "GET",
+    headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${API_KEY}`,
+    }
+};
 export class ResponseHandler {
     handler(req, res, next) {
         // get the search query from the headers
@@ -53,7 +59,8 @@ export class ResponseHandler {
 
                 break;
             case "showing":
-                // phase 5
+                searchQuery.day ??= new Date().toISOString().split("T")[0];
+
                 break;
             default:
                 res.status(400).json({message: "Invalid search query type. Must be one of: movie, showing, now_playing or cast."});
@@ -61,13 +68,6 @@ export class ResponseHandler {
         function handleMovieRequest (req, res, next, id) {
             // get the movie info from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
-            const options = {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                }
-            };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
                 res.json(convertMovieToJson(json));
@@ -76,13 +76,6 @@ export class ResponseHandler {
         function handleNowPlayingRequest (req, res, next, page) {
             // get the movie info from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${page}`;
-            const options = {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                }
-            };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
                 res.json(convertNowPlayingJson(json));
@@ -91,13 +84,6 @@ export class ResponseHandler {
         function handleCastRequest (req, res, next, id) {
             // get the cast data from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`;
-            const options = {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                }
-            };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
                 res.send(convertCast(json));
