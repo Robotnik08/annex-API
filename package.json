@@ -1,15 +1,18 @@
 {
     "name": "annex-bios-api",
-    "version": "0.1",
+    "version": "1.0",
     "description": "This is the main API for the annex bios project.",
     "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node main.js"
+        "start": "node main.js",
+        "key": "node addKey.js"
     },
     "author": "Pulllee Inc.",
     "dependencies": {
-        "express": "^4.18.1"
+        "express": "^4.18.1",
+        "mysql": "^2.18.1",
+        "node-fetch": "^2.7.0"
     },
     "type": "module"
 }
