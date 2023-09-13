@@ -1,5 +1,5 @@
 <?php
-    //these are the most recent movies from the api as of 2023-09-13
+    //these are the most recent movies ids from the api as of 2023-09-13
     $ids = [
         615656,
         346698,
@@ -24,13 +24,13 @@
     ];
 
 
-    // connect to sql database
+    // connect to sql database (change these to your own)
     $servername = "localhost";
     $username = "root";
     $password = "";
     $dbname = "annex-bios";
     
-    //pdo
+    // pdo init
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -38,6 +38,7 @@
     catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
+    // seed database
     seedDataBase($ids, $conn);
     function seedDataBase ($ids, $conn) {
         for ($day = 0; $day < 366; $day++) {

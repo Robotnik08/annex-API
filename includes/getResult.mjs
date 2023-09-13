@@ -61,7 +61,7 @@ export class ResponseHandler {
 
                 break;
             case "showing":
-                searchQuery.day ??= Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+                searchQuery.day ??= Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000); // get the day of the year
                 if (typeof searchQuery.day !== "number") {
                     res.status(400).json({message: "Day must be a number."});
                     return;
@@ -130,7 +130,7 @@ export class ResponseHandler {
                     res.status(404).json({message: "No showings found."});
                     return;
                 }
-                res.json(convertShowingJson(results));
+                res.json(results);
             });
                 
         }   
@@ -160,9 +160,6 @@ export class ResponseHandler {
                 });
             }
             return result
-        }
-        function convertShowingJson(json){
-            return json;
         }
 
         function convertMovieToJson (json) {
