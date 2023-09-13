@@ -5,8 +5,16 @@
  */
 
 import fetch from "node-fetch";
+import { API_KEY } from "./getConfig.mjs";
+import { createConnection } from "mysql";
 
-const API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNjM3NzgwMDliNjM1ZDA2NTVkMTdjMmFlYTc2YzIzZiIsInN1YiI6IjY0Zjg3MjU5NWYyYjhkMDBjNDM1MWNjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B9_HCUeJyEZWDTNF31ZVhYdxTmeymyidiPPfyu50dVg";
+const options = {
+    method: "GET",
+    headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${API_KEY}`,
+    }
+};
 
 export class ResponseHandler {
     handler(req, res, next) {
@@ -53,7 +61,24 @@ export class ResponseHandler {
 
                 break;
             case "showing":
-                // phase 5
+                searchQuery.day ??= Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+                if (typeof searchQuery.day !== "number") {
+                    res.status(400).json({message: "Day must be a number."});
+                    return;
+                }
+                if (searchQuery.location === undefined) {
+                    res.status(400).json({message: "No location provided."});
+                    return;
+                }
+                if (typeof searchQuery.location !== "string") {
+                    res.status(400).json({message: "Location must be a string."});
+                    return;
+                }
+                if (searchQuery.location.split(" ").length > 1 || !(/^[A-Za-z]+$/).test(searchQuery.location)) { 
+                    res.status(400).json({message: "Invalid location."});
+                    return;
+                }
+                handleShowingRequest(req, res, next, searchQuery.day, searchQuery.location);
                 break;
             default:
                 res.status(400).json({message: "Invalid search query type. Must be one of: movie, showing, now_playing or cast."});
@@ -61,13 +86,6 @@ export class ResponseHandler {
         function handleMovieRequest (req, res, next, id) {
             // get the movie info from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
-            const options = {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                }
-            };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
                 res.json(convertMovieToJson(json));
@@ -76,13 +94,6 @@ export class ResponseHandler {
         function handleNowPlayingRequest (req, res, next, page) {
             // get the movie info from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${page}`;
-            const options = {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                }
-            };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
                 res.json(convertNowPlayingJson(json));
@@ -91,25 +102,45 @@ export class ResponseHandler {
         function handleCastRequest (req, res, next, id) {
             // get the cast data from the movie database from the id
             const url = `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`;
-            const options = {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    Authorization: `Bearer ${API_KEY}`,
-                }
-            };
             fetch(url, options).then((res) => res.json())
             .then((json) => {
                 res.send(convertCast(json));
             });
         }
+        function handleShowingRequest (req, res, next, day, location) {
+            //get showing data from the local SQL database
+            if (day < 0 || day > 365) {
+                res.status(400).json({message: "Invalid day. Must be between 0 and 365."});
+                return;
+            }
+            const connection = createConnection({
+                host: "localhost",
+                user: "root",
+                password: "",
+                database: "annex-bios"
+            });
+            connection.connect();
+            const query = `SELECT * FROM showing WHERE DAYOFYEAR(time) = '${day}' AND theatre = '${location}'`;
+            connection.query(query, (error, results, fields) => {
+                if (error) {
+                    res.status(500).json({message: "Internal server error. (query might be invalid)"});
+                    return;
+                }
+                if (results.length === 0) {
+                    res.status(404).json({message: "No showings found."});
+                    return;
+                }
+                res.json(convertShowingJson(results));
+            });
+                
+        }   
         function convertNowPlayingJson(json){
             const result = {
                 results: []
             }
-             for (let movie of json.results){
-                result.results.push(convertMovieToJson(movie));
-             }
+            for (let movie of json.results){
+            result.results.push(convertMovieToJson(movie));
+            }
             return result;
         }
 
@@ -128,8 +159,10 @@ export class ResponseHandler {
                     order: cast.order
                 });
             }
-
             return result
+        }
+        function convertShowingJson(json){
+            return json;
         }
 
         function convertMovieToJson (json) {
