@@ -23,9 +23,6 @@ export class Middleware {
         } else if (!rateLimiter.checkKey(key)) {
             res.status(429).json({error: 'Too many requests. Please try again later. (Next hour)'});
             return;
-        } else if (Math.random() < 0.01) {
-            res.status(418).json({error: 'Internal server error. Please try again later.'});
-            return;
         }
 
         next();
