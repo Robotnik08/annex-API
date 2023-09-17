@@ -175,7 +175,6 @@ export class ResponseHandler {
                 runtime: json.runtime,
                 genres: json.genres ? [] : undefined,
                 rating: json.vote_average,
-                release_date: json.release_date,
                 duration: json.runtime,
                 poster: "https://image.tmdb.org/t/p/original" + json.poster_path,
                 big_description: json.overview,
