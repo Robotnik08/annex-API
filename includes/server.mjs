@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
+import cors from 'cors';
 
 const options = {
     cert: fs.readFileSync("PATH_TO_KEY"),
@@ -22,6 +23,7 @@ export class Server {
      */
     constructor(port, _https = false) {
         this.#expressApp = express();
+        this.#expressApp.use(cors());
         if (!_https) {
             this.#server = http.createServer(this.#expressApp);
             this.#port = port;
