@@ -6,7 +6,7 @@
 
 import fetch from "node-fetch";
 import { API_KEY } from "./getConfig.mjs";
-import { createConnection } from "mysql";
+import { createConnection } from "mysql2";
 
 const options = {
     method: "GET",
@@ -116,6 +116,7 @@ export class ResponseHandler {
             const connection = createConnection({
                 host: "localhost",
                 user: "root",
+                port: 3306,
                 password: "",
                 database: "annex-bios"
             });
