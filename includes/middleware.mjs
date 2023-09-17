@@ -13,7 +13,7 @@ const rateLimiter = new RateLimiter();
 export class Middleware {
     handler(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*'); // wild card
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.header('Access-Control-Allow-Headers', '*');
         res.header('Access-Control-Allow-Methods', 'GET'); // only allow GET requests for REST API
         
         const key = req.headers.authorization;
