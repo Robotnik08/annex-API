@@ -13,7 +13,7 @@ const rateLimiter = new RateLimiter();
 export class Middleware {
     handler(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*'); // wild card
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.header('Access-Control-Allow-Headers', '*');
         res.header('Access-Control-Allow-Methods', 'GET'); // only allow GET requests for REST API
         
         const key = req.headers.authorization;
@@ -22,9 +22,6 @@ export class Middleware {
             return; 
         } else if (!rateLimiter.checkKey(key)) {
             res.status(429).json({error: 'Too many requests. Please try again later. (Next hour)'});
-            return;
-        } else if (Math.random() < 0.01) {
-            res.status(418).json({error: 'Internal server error. Please try again later.'});
             return;
         }
 
