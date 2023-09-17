@@ -178,10 +178,10 @@ export class ResponseHandler {
                 release_date: json.release_date,
                 duration: json.runtime,
                 poster: "https://image.tmdb.org/t/p/original" + json.poster_path,
-                big_discription: json.overview,
-                small_discription: json.tagline,
+                big_description: json.overview,
+                small_description: json.tagline,
                 original_language: json.original_language,
-                counrty_of_origin: json.production_countries ? json.production_countries[0].name : undefined,
+                country_of_origin: json.production_countries ? json.production_countries[0].name : undefined,
                 status: json.status,
                 production_companies: json.production_companies ? [] : undefined
             }
